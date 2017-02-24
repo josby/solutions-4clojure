@@ -1,4 +1,4 @@
-(ns solutions-4clojure.easy-problems-tests
+(ns solutions-4clojure.easy-problems-test
     (:require [clojure.test :refer :all]
       [solutions-4clojure.easy-problems :refer :all]))
 

@@ -131,7 +131,7 @@
 ; https://www.4clojure.com/problem/28
 ;
 ; Write a function which flattens a sequence.
-; Special Restrictions flatten
+; Special Restrictions: flatten
 ; (= (__ '((1 2) 3 [4 [5 6]])) '(1 2 3 4 5 6))
 ; (= (__ ["a" ["b"] "c"]) '("a" "b" "c"))
 ; (= (__ '((((:a))))) '(:a))
@@ -142,3 +142,140 @@
               (conj acc x)))]
 
     (reduce flattify [] xs)))
+
+
+; 29 - Get the Caps
+; https://www.4clojure.com/problem/29
+;
+; Write a function which takes a string and returns a new string containing only the capital letters.
+; (= (__ "HeLlO, WoRlD!") "HLOWRD")
+; (empty? (__ "nothing"))
+; (= (__ "$#A(*&987Zf") "AZ")
+(defn get-the-caps [input-string]
+  (let [only-uppercase-char-seq (filter #(Character/isUpperCase %) input-string)]
+    (apply str only-uppercase-char-seq)))
+
+
+; 30 - Compress a Sequence
+; https://www.4clojure.com/problem/30
+;
+; Write a function which removes consecutive duplicates from a sequence.
+; (= (apply str (__ "Leeeeeerrroyyy")) "Leroy")
+; (= (__ [1 1 2 3 3 2 2 3]) '(1 2 3 2 3))
+; (= (__ [[1 2] [1 2] [3 4] [1 2]]) '([1 2] [3 4] [1 2]))
+(defn compress-seq [input]
+  (letfn [(take-needed-elements [acc current]
+            (if (= current (last acc))
+              acc
+              (conj acc current)))]
+    (reduce take-needed-elements [] input)))
+
+
+; 31 - Pack a Sequence
+; https://www.4clojure.com/problem/31
+;
+; Write a function which packs consecutive duplicates into sub-lists.
+; (= (__ [1 1 2 1 1 1 3 3]) '((1 1) (2) (1 1 1) (3 3)))
+; (= (__ [:a :a :b :b :c]) '((:a :a) (:b :b) (:c)))
+; (= (__ [[1 2] [1 2] [3 4]]) '(([1 2] [1 2]) ([3 4])))
+(defn pack-seq [input]
+  (partition-by identity input))
+
+
+; 32 - Duplicate a Sequence
+; https://www.4clojure.com/problem/32
+;
+; Write a function which duplicates each element of a sequence.
+; (= (__ [1 2 3]) '(1 1 2 2 3 3))
+; (= (__ [:a :a :b :b]) '(:a :a :a :a :b :b :b :b))
+; (= (__ [[1 2] [3 4]]) '([1 2] [1 2] [3 4] [3 4]))
+(defn duplicate-seq [xs]
+  (->> xs
+       (map #(list %, %))
+       (reduce concat)))
+
+
+; 33 - Replicate a Sequence
+; https://www.4clojure.com/problem/33
+;
+; Write a function which replicates each element of a sequence a variable number of times.
+; (= (__ [1 2 3] 2) '(1 1 2 2 3 3))
+; (= (__ [:a :b] 4) '(:a :a :a :a :b :b :b :b))
+; (= (__ [4 5 6] 1) '(4 5 6))
+; (= (__ [[1 2] [3 4]] 2) '([1 2] [1 2] [3 4] [3 4]))
+; (= (__ [44 33] 2) [44 44 33 33])
+(defn replicate-seq [initial-elements n]
+  (mapcat #(repeat n %) initial-elements))
+
+
+; 34 - Implement range
+; https://www.4clojure.com/problem/34
+;
+; Write a function which creates a list of all integers in a given range.
+; Special Restrictions: range
+; (= (__ 1 4) '(1 2 3))
+; (= (__ -2 2) '(-2 -1 0 1))
+; (= (__ 5 8) '(5 6 7))
+(defn my-range [low high]
+  (letfn [(gen-range [current]
+            (lazy-seq (cons current (gen-range (inc current)))))]
+    (when (< low high)
+      (take-while #(not= % high) (gen-range low)))))
+
+
+; 38 - Maximum value
+; https://www.4clojure.com/problem/38
+;
+; Write a function which takes a variable number of parameters and returns the maximum value.
+; (= (__ 1 8 3 4) 8)
+; (= (__ 30 20) 30)
+; (= (__ 45 67 11) 67)
+(defn my-max [& xs]
+  (reduce (fn max-of-two [left right]
+            (if (> left right)
+              left
+              right)) xs))
+
+
+; 39 - Interleave Two Seqs
+; https://www.4clojure.com/problem/39
+;
+; Write a function which takes two sequences and returns the first item from each, then the second item from each,
+; then the third, etc.
+; Special Restrictions: interleave
+; (= (__ [1 2 3] [:a :b :c]) '(1 :a 2 :b 3 :c))
+; (= (__ [1 2] [3 4 5 6]) '(1 3 2 4))
+; (= (__ [1 2 3 4] [5]) [1 5])
+; (= (__ [30 20] [25 15]) [30 25 20 15])
+(defn interleave-two-seqs [xs1 xs2]
+  (letfn [(generate-seq [xs1 xs2]
+            (lazy-seq (cons (list (first xs1) (first xs2)) (generate-seq (rest xs1) (rest xs2)))))]
+    (flatten (take (min (count xs1) (count xs2)) (generate-seq xs1 xs2)))))
+
+
+; 40 - Interpose a Seq
+; https://www.4clojure.com/problem/40
+;
+; Write a function which separates the items of a sequence by an arbitrary value.
+; Special Restrictions: interpose
+; (= (__ 0 [1 2 3]) [1 0 2 0 3])
+; (= (apply str (__ ", " ["one" "two" "three"])) "one, two, three")
+; (= (__ :z [:a :b :c :d]) [:a :z :b :z :c :z :d])
+(defn interpose-seq [separator xs]
+  (let [tail (mapcat #(list separator %) (rest xs)) ;we do not want to add separator after the last element
+        head (first xs) ]
+    (conj tail head )))
+
+
+; 41 - Drop Every Nth Item
+; https://www.4clojure.com/problem/41
+;
+; Write a function which drops every Nth item from a sequence.
+; (= (__ [1 2 3 4 5 6 7 8] 3) [1 2 4 5 7 8])
+; (= (__ [:a :b :c :d :e :f] 2) [:a :c :e])
+; (= (__ [1 2 3 4 5 6] 4) [1 2 3 5 6])
+(defn drop-every-nth [xs n]
+  (->> (partition-all n xs)
+       (mapcat #(if (< (count %) n)
+                  %
+                  (butlast %)))))

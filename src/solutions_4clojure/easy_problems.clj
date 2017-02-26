@@ -263,7 +263,7 @@
 ; (= (__ :z [:a :b :c :d]) [:a :z :b :z :c :z :d])
 (defn interpose-seq [separator xs]
   (let [tail (mapcat #(list separator %) (rest xs)) ;we do not want to add separator after the last element
-        head (first xs) ]
+        head (first xs)]
     (conj tail head )))
 
 
@@ -279,3 +279,155 @@
        (mapcat #(if (< (count %) n)
                   %
                   (butlast %)))))
+
+
+; 42 - Factorial Fun
+; https://www.4clojure.com/problem/42
+;
+; Write a function which calculates factorials.
+; (= (__ 1) 1)
+; (= (__ 3) 6)
+; (= (__ 5) 120)
+; (= (__ 8) 40320)
+(defn factorial [n] (reduce * (range 1 (inc n))))
+
+
+; 45 - Intro to Iterate
+; https://www.4clojure.com/problem/45
+;
+; The iterate function can be used to produce an infinite lazy sequence.
+; (= __ (take 5 (iterate #(+ 3 %) 1)))
+(defn intro-to-iterate []
+  '(1 4 7 10 13))
+
+
+; 48 - Intro to some
+; https://www.4clojure.com/problem/48
+;
+; The some function takes a predicate function and a collection.
+; It returns the first logical true value of (predicate x) where x is an item in the collection.
+; (= __ (some #{2 7 6} [5 6 7 8]))
+; (= __ (some #(when (even? %) %) [5 6 7 8]))
+(defn intro-to-some [] 6)
+
+
+; 51 - Advanced Destructuring
+; https://www.4clojure.com/problem/51
+;
+; Here is an example of some more sophisticated destructuring.
+; (= [1 2 [3 4 5] [1 2 3 4 5]] (let [[a b & c :as d] __] [a b c d]))
+(defn advanced-destructuring []
+  [1 2 3 4 5])
+
+
+; 66 - Greatest Common Divisor
+; https://www.4clojure.com/problem/66
+;
+; Given two integers, write a function which returns the greatest common divisor.
+; (= (__ 2 4) 2)
+; (= (__ 10 5) 5)
+; (= (__ 5 7) 1)
+; (= (__ 1023 858) 33)
+(defn gcd [a b]
+  (cond
+    (= a 0) b
+    (= b 0) a
+    (> a b) (gcd (mod a b) b)
+    (> b a) (gcd a (mod b a))))
+
+
+; 88 - Symmetric Difference
+; https://www.4clojure.com/problem/88
+;
+; Write a function which returns the symmetric difference of two sets.
+; The symmetric difference is the set of items belonging to one but not both of the two sets.
+; (= (__ #{1 2 3 4 5 6} #{1 3 5 7}) #{2 4 6 7})
+; (= (__ #{:a :b :c} #{}) #{:a :b :c})
+; (= (__ #{} #{4 5 6}) #{4 5 6})
+; (= (__ #{[1 2] [2 3]} #{[2 3] [3 4]}) #{[1 2] [3 4]})
+(defn symmetric-difference [set1 set2]
+  (letfn [(xor [p q]
+               (and
+                 (or p q)
+                 (not (and p q))))]
+         (let [all-elements (into set1 set2)]
+              (into #{} (filter #(xor (contains? set1 %)
+                                      (contains? set2 %)) all-elements)))))
+
+
+; 90 - Cartesian Product
+; https://www.4clojure.com/problem/90
+;
+; Write a function which calculates the Cartesian product of two sets.
+; (= (__ #{"ace" "king" "queen"} #{"♠" "♥" "♦" "♣"})
+;     #{["ace" "♠"] ["ace" "♥"] ["ace" "♦"] ["ace" "♣"]
+;       ["king" "♠"] ["king" "♥"] ["king" "♦"] ["king" "♣"]
+;       ["queen" "♠"] ["queen" "♥"] ["queen" "♦"] ["queen" "♣"]} )
+; (= (__ #{1 2 3} #{4 5})
+;     #{[1 4] [2 4] [3 4] [1 5] [2 5] [3 5]})
+; (= 300 (count (__ (into #{} (range 10))
+;                   (into #{} (range 30)))))
+(defn cartesian-product [left right]
+  (letfn [(zip [xs current]
+               (map vector (repeat current) xs))]
+         (let [cartesian (mapcat (partial zip right) left)]
+              (into #{} cartesian))))
+
+
+; 95 - To Tree, or not to Tree
+; https://www.4clojure.com/problem/95
+;
+; Write a predicate which checks whether or not a given sequence represents a binary tree.
+; Each node in the tree must have a value, a left child, and a right child.
+; (= (__ '(:a (:b nil nil) nil))
+;    true)
+; (= (__ '(:a (:b nil nil)))
+;    false)
+; (= (__ [1 nil [2 [3 nil nil] [4 nil nil]]])
+;    true)
+; (= (__ [1 [2 nil nil] [3 nil nil] [4 nil nil]])
+;    false)
+; (= (__ [1 [2 [3 [4 nil nil] nil] nil] nil])
+;    true)
+; (= (__ [1 [2 [3 [4 false nil] nil] nil] nil])
+;    false)
+; (= (__ '(:a nil ()))
+;    false)
+(defn tree? [x]
+  (letfn [(has-3-elements [node]
+                          (= (count node) 3))]
+         (cond (nil? x) true
+               (or (not (sequential? x))
+                   (not (has-3-elements x))) false
+               :else (and (tree? (nth x 1))
+                          (tree? (nth x 2))))))
+
+
+; 97 - Pascal's Triangle
+; https://www.4clojure.com/problem/97
+;
+; Write a predicate which checks whether or not a given sequence represents a binary tree.
+; Pascal's triangle is a triangle of numbers computed using the following rules:
+; - The first row is 1.
+; - Each successive row is computed by adding together adjacent numbers in the row above, and adding a 1 to the beginning and end of the row.
+; Write a function which returns the nth row of Pascal's Triangle.
+; (= (__ 1) [1])
+; (= (map __ (range 1 6))
+;    [     [1]
+;         [1 1]
+;        [1 2 1]
+;       [1 3 3 1]
+;      [1 4 6 4 1]])
+; (= (__ 11)
+;    [1 10 45 120 210 252 210 120 45 10 1])
+(defn get-pascal-triangle [row]
+  (letfn [(calculate-value-at [row col]
+                              (cond
+                                (= col 0) 1
+                                (= col row) 1
+                                :else (+ (calculate-value-at (dec row) (dec col))
+                                         (calculate-value-at (dec row) col))))]
+         (let [_row (dec row)                           ; _row should be 1 based
+               calculated-row (for [col (range row)]
+                                   (calculate-value-at _row col))]
+              calculated-row)))

@@ -115,5 +115,70 @@
 
 (deftest _drop-every-nth
   (is (= (drop-every-nth [1 2 3 4 5 6 7 8] 3) [1 2 4 5 7 8]))
-  (is (= (drop-every-nth [1 2 3 4 5 6] 4) [1 2 3 5 6])))
-  (is (= (drop-every-nth [:a :b :c :d :e :f] 2) [:a :c :e]))
+  (is (= (drop-every-nth [1 2 3 4 5 6] 4) [1 2 3 5 6]))
+  (is (= (drop-every-nth [:a :b :c :d :e :f] 2) [:a :c :e])))
+
+(deftest _factorial
+  (is (= (factorial 1) 1))
+  (is (= (factorial 3) 6))
+  (is (= (factorial 5) 120))
+  (is (= (factorial 8) 40320)))
+
+(deftest _intro-to-iterate
+  (is (= (intro-to-iterate) (take 5 (iterate #(+ 3 %) 1)))))
+
+(deftest _intro-to-some
+  (is (= (intro-to-some) (some #{2 7 6} [5 6 7 8])))
+  (is (= (intro-to-some) (some #{2 7 6} [5 6 7 8]))))
+
+(deftest _advanced-destructuring
+  (is (= [1 2 [3 4 5] [1 2 3 4 5]] (let [[a b & c :as d] (advanced-destructuring)] [a b c d]))))
+
+(deftest _gcd
+  (is (= (gcd 2 4) 2))
+  (is (= (gcd 10 5) 5))
+  (is (= (gcd 5 7) 1))
+  (is (= (gcd 1023 858) 33)))
+
+(deftest _symmetric-difference
+  (is (= (symmetric-difference #{1 2 3 4 5 6} #{1 3 5 7}) #{2 4 6 7}))
+  (is (= (symmetric-difference #{:a :b :c} #{}) #{:a :b :c}))
+  (is (= (symmetric-difference #{} #{4 5 6}) #{4 5 6}))
+  (is (= (symmetric-difference #{[1 2] [2 3]} #{[2 3] [3 4]}) #{[1 2] [3 4]})))
+
+(deftest _cartesian-product
+  (is (= (cartesian-product #{"ace" "king" "queen"} #{"♠" "♥" "♦" "♣"})
+         #{["ace"   "♠"] ["ace"   "♥"] ["ace"   "♦"] ["ace"   "♣"]
+           ["king"  "♠"] ["king"  "♥"] ["king"  "♦"] ["king"  "♣"]
+           ["queen" "♠"] ["queen" "♥"] ["queen" "♦"] ["queen" "♣"]}))
+  (is (= (cartesian-product #{1 2 3} #{4 5})
+         #{[1 4] [2 4] [3 4] [1 5] [2 5] [3 5]}))
+  (is (= 300 (count (cartesian-product (into #{} (range 10))
+                                       (into #{} (range 30)))))))
+
+(deftest _tree?
+  (is (= (tree? '(:a (:b nil nil) nil))
+         true))
+  (is (= (tree? '(:a (:b nil nil)))
+         false))
+  (is (= (tree? [1 nil [2 [3 nil nil] [4 nil nil]]])
+         true))
+  (is (= (tree? [1 [2 nil nil] [3 nil nil] [4 nil nil]])
+         false))
+  (is (= (tree? [1 [2 [3 [4 nil nil] nil] nil] nil])
+         true))
+  (is (= (tree? [1 [2 [3 [4 false nil] nil] nil] nil])
+         false))
+  (is (= (tree? '(:a nil ()))
+         false)))
+
+(deftest _get-pascal-triangle
+  (is (= (get-pascal-triangle 1) [1]))
+  (is (= (map get-pascal-triangle (range 1 6))
+         [ [1]
+          [1 1]
+         [1 2 1]
+        [1 3 3 1]
+       [1 4 6 4 1]]))
+  (is (= (get-pascal-triangle 11)
+         [1 10 45 120 210 252 210 120 45 10 1])))

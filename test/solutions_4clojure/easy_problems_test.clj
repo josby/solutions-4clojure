@@ -182,3 +182,9 @@
        [1 4 6 4 1]]))
   (is (= (get-pascal-triangle 11)
          [1 10 45 120 210 252 210 120 45 10 1])))
+
+(deftest _to-n-power
+         (is (= 256 ((to-n-power 2) 16),
+                ((to-n-power 8) 2)))
+         (is (= [1 8 27 64] (map (to-n-power 3) [1 2 3 4])))
+         (is (= [1 2 4 8 16] (map #((to-n-power %) 2) [0 1 2 3 4]))))

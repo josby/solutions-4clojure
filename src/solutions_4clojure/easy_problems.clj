@@ -301,6 +301,18 @@
   '(1 4 7 10 13))
 
 
+; 47 - Contain Yourself
+; https://www.4clojure.com/problem/47
+; The contains? function checks if a KEY is present in a given collection. This often leads beginner clojurians
+; to use it incorrectly with numerically indexed collections like vectors and lists.
+; (contains? #{4 5 6} __)
+; (contains? [1 1 1 1 1] __)
+; (contains? {4 :a 2 :b} __)
+; (not (contains? [1 2 4] __))
+(defn contain-yourself []
+  4)
+
+
 ; 48 - Intro to some
 ; https://www.4clojure.com/problem/48
 ;
@@ -309,6 +321,18 @@
 ; (= __ (some #{2 7 6} [5 6 7 8]))
 ; (= __ (some #(when (even? %) %) [5 6 7 8]))
 (defn intro-to-some [] 6)
+
+
+; 49 - Split a sequence
+; https://www.4clojure.com/problem/49
+;
+; Write a function which will split a sequence into two parts.
+; (= (__ 3 [1 2 3 4 5 6]) [[1 2 3] [4 5 6]])
+; (= (__ 1 [:a :b :c :d]) [[:a] [:b :c :d]])
+; (= (__ 2 [[1 2] [3 4] [5 6]]) [[[1 2] [3 4]] [[5 6]]])
+(defn split-seq-at [n xs]
+  [(take n xs)
+   (drop n xs)])
 
 
 ; 51 - Advanced Destructuring
@@ -435,7 +459,6 @@
 ; 107 - Simple closures
 ; https://www.4clojure.com/problem/107
 ;
-
 ; Lexical scope and first-class functions are two of the most basic building blocks of a functional language like
 ; Clojure. When you combine the two together, you get something very powerful called lexical closures. With these,
 ; you can exercise a great deal of control over the lifetime of your local bindings, saving their values for use later,
@@ -443,10 +466,9 @@
 ; It can be hard to follow in the abstract, so let's build a simple closure. Given a positive integer n,
 ; return a function (f x) which computes xn. Observe that the effect of this is to preserve the value of n for use
 ; outside the scope in which it is defined.
-
-;(= 256 ((__ 2) 16),
-;   ((__ 8) 2))
-;(= [1 8 27 64] (map (__ 3) [1 2 3 4]))
-;(= [1 2 4 8 16] (map #((__ %) 2) [0 1 2 3 4]))
+; (= 256 ((__ 2) 16),
+;    ((__ 8) 2))
+; (= [1 8 27 64] (map (__ 3) [1 2 3 4]))
+; (= [1 2 4 8 16] (map #((__ %) 2) [0 1 2 3 4]))
 (defn to-n-power [n]
   #(reduce * (repeat n %1)))

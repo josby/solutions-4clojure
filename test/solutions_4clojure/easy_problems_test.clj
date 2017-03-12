@@ -127,9 +127,20 @@
 (deftest _intro-to-iterate
   (is (= (intro-to-iterate) (take 5 (iterate #(+ 3 %) 1)))))
 
+(deftest _contain-yourself
+  (is (contains? #{4 5 6} (contain-yourself)))
+  (is (contains? [1 1 1 1 1] (contain-yourself)))
+  (is (contains? {4 :a 2 :b} (contain-yourself)))
+  (is (not (contains? [1 2 4] (contain-yourself)))))
+
 (deftest _intro-to-some
   (is (= (intro-to-some) (some #{2 7 6} [5 6 7 8])))
   (is (= (intro-to-some) (some #{2 7 6} [5 6 7 8]))))
+
+(deftest _split-seq-at
+  (is (= (split-seq-at 3 [1 2 3 4 5 6]) [[1 2 3] [4 5 6]]))
+  (is (= (split-seq-at 1 [:a :b :c :d]) [[:a] [:b :c :d]]))
+  (is (= (split-seq-at 2 [[1 2] [3 4] [5 6]]) [[[1 2] [3 4]] [[5 6]]])))
 
 (deftest _advanced-destructuring
   (is (= [1 2 [3 4 5] [1 2 3 4 5]] (let [[a b & c :as d] (advanced-destructuring)] [a b c d]))))

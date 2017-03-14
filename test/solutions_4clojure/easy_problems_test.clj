@@ -151,6 +151,14 @@
   (is (= (gcd 5 7) 1))
   (is (= (gcd 1023 858) 33)))
 
+(deftest _half-truth
+  (is (= false (half-truth false false)))
+  (is (= true (half-truth true false)))
+  (is (= false (half-truth true)))
+  (is (= true (half-truth false true false)))
+  (is (= false (half-truth true true true)))
+  (is (= true (half-truth true true true false))))
+
 (deftest _symmetric-difference
   (is (= (symmetric-difference #{1 2 3 4 5 6} #{1 3 5 7}) #{2 4 6 7}))
   (is (= (symmetric-difference #{:a :b :c} #{}) #{:a :b :c}))

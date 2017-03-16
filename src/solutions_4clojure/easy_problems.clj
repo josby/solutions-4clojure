@@ -344,6 +344,12 @@
   [1 2 3 4 5])
 
 
+; 62
+(defn my-iterate [f init-val]
+  (lazy-seq
+   (cons init-val (my-iterate f (f init-val)))))
+
+
 ; 66 - Greatest Common Divisor
 ; https://www.4clojure.com/problem/66
 ;
@@ -491,3 +497,14 @@
 ; (= [1 2 4 8 16] (map #((__ %) 2) [0 1 2 3 4]))
 (defn to-n-power [n]
   #(reduce * (repeat n %1)))
+
+; 122
+(defn read-binary [n]
+  (letfn [(exp [base exponent]
+            (reduce * (repeat exponent base)))
+          (calculate-nth [idx itm]
+            (if (= itm \1)
+              (exp 2 idx)
+              0))]
+
+    (reduce + (map-indexed calculate-nth (reverse n)))))

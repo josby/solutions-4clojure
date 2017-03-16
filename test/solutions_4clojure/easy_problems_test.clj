@@ -145,6 +145,11 @@
 (deftest _advanced-destructuring
   (is (= [1 2 [3 4 5] [1 2 3 4 5]] (let [[a b & c :as d] (advanced-destructuring)] [a b c d]))))
 
+(deftest _my-iterate
+  (is (= (take 5 (my-iterate #(* 2 %) 1)) [1 2 4 8 16]))
+  (is (= (take 100 (my-iterate inc 0)) (take 100 (range))))
+  (is (= (take 9 (my-iterate #(inc (mod % 3)) 1)) (take 9 (cycle [1 2 3])))))
+
 (deftest _gcd
   (is (= (gcd 2 4) 2))
   (is (= (gcd 10 5) 5))

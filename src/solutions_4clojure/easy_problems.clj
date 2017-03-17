@@ -498,6 +498,13 @@
 (defn to-n-power [n]
   #(reduce * (repeat n %1)))
 
+; 118
+(defn my-map [f xs]
+  (if (empty? xs)
+    nil
+    (lazy-seq
+     (cons (f (first xs)) (my-map f (rest xs))))))
+
 ; 122
 (defn read-binary [n]
   (letfn [(exp [base exponent]

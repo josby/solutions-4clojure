@@ -344,7 +344,15 @@
   [1 2 3 4 5])
 
 
-; 62
+; 62 - Re-implement Iterate
+; https://www.4clojure.com/problem/62
+;
+; Given a side-effect free function f and an initial value x write a function which returns
+; an infinite lazy sequence of x, (f x), (f (f x)), (f (f (f x))), etc.
+; Special Restrictions: iterate
+; (= (take 5 (__ #(* 2 %) 1)) [1 2 4 8 16])
+; (= (take 100 (__ inc 0)) (take 100 (range)))
+; (= (take 9 (__ #(inc (mod % 3)) 1)) (take 9 (cycle [1 2 3])))
 (defn my-iterate [f init-val]
   (lazy-seq
    (cons init-val (my-iterate f (f init-val)))))
@@ -498,14 +506,40 @@
 (defn to-n-power [n]
   #(reduce * (repeat n %1)))
 
-; 118
+
+; 118 - Re-implement Map
+; https://www.4clojure.com/problem/118
+;
+; Map is one of the core elements of a functional programming language.
+; Given a function f and an input sequence s,
+; return a lazy sequence of (f x) for each element x in s.
+; Special Restrictions: map, map-indexed, mapcat, for
+; (= [3 4 5 6 7]
+;    (__ inc [2 3 4 5 6]))
+; (= (repeat 10 nil)
+;    (__ (fn [_] nil) (range 10)))
+; (= [1000000 1000001]
+;    (->> (__ inc (range))
+;         (drop (dec 1000000))
+;         (take 2)))
 (defn my-map [f xs]
   (if (empty? xs)
     nil
     (lazy-seq
      (cons (f (first xs)) (my-map f (rest xs))))))
 
-; 122
+
+; 122 - Read a binary number
+; https://www.4clojure.com/problem/122
+;
+; Convert a binary number, provided in the form of a string, to its numerical value.
+; (= 0     (__ "0"))
+; (= 7     (__ "111"))
+; (= 7     (__ "111"))
+; (= 9     (__ "1001"))
+; (= 255   (__ "11111111"))
+; (= 1365  (__ "10101010101"))
+; (= 65535 (__ "1111111111111111"))
 (defn read-binary [n]
   (letfn [(exp [base exponent]
             (reduce * (repeat exponent base)))

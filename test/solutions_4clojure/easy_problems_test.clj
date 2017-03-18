@@ -208,7 +208,26 @@
          [1 10 45 120 210 252 210 120 45 10 1])))
 
 (deftest _to-n-power
-         (is (= 256 ((to-n-power 2) 16),
-                ((to-n-power 8) 2)))
-         (is (= [1 8 27 64] (map (to-n-power 3) [1 2 3 4])))
-         (is (= [1 2 4 8 16] (map #((to-n-power %) 2) [0 1 2 3 4]))))
+  (is (= 256 ((to-n-power 2) 16),
+         ((to-n-power 8) 2)))
+  (is (= [1 8 27 64] (map (to-n-power 3) [1 2 3 4])))
+  (is (= [1 2 4 8 16] (map #((to-n-power %) 2) [0 1 2 3 4]))))
+
+(deftest _my-map
+  (is (= [3 4 5 6 7]
+         (my-map inc [2 3 4 5 6])))
+  (is (= (repeat 10 nil)
+         (my-map (fn [_] nil) (range 10))))
+  (is (= [1000000 1000001]
+         (->> (my-map inc (range))
+              (drop (dec 1000000))
+              (take 2)))))
+
+(deftest _read-binary
+  (is (= 0     (read-binary "0")))
+  (is (= 7     (read-binary "111")))
+  (is (= 8     (read-binary "1000")))
+  (is (= 9     (read-binary "1001")))
+  (is (= 255   (read-binary "11111111")))
+  (is (= 1365  (read-binary "10101010101")))
+  (is (= 65535 (read-binary "1111111111111111"))))

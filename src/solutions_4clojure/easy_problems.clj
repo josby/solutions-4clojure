@@ -489,6 +489,26 @@
                            (calculate-value-at _row col))]
       calculated-row)))
 
+
+; 99 - Product Digits
+; https://www.4clojure.com/problem/99
+;
+; Write a function which multiplies two numbers and returns the result
+; as a sequence of its digits.
+; (= (__ 1 1) [1])
+; (= (__ 99 9) [8 9 1])
+; (= (__ 999 99) [9 8 9 0 1])
+(defn product-digits [a b]
+  (let [multiplied (* a b)]
+    multiplied
+    (loop [digits []
+           current-val multiplied]
+      (if (zero? current-val)
+        (reverse digits)
+        (recur (conj digits (mod current-val 10))
+               (quot current-val 10))))))
+
+
 ; 107 - Simple closures
 ; https://www.4clojure.com/problem/107
 ;

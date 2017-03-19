@@ -207,6 +207,11 @@
   (is (= (get-pascal-triangle 11)
          [1 10 45 120 210 252 210 120 45 10 1])))
 
+(deftest _product-digits
+  (is (= (product-digits 1 1) [1]))
+  (is (= (product-digits 99 9) [8 9 1]))
+  (is (= (product-digits 999 99) [9 8 9 0 1])))
+
 (deftest _to-n-power
   (is (= 256 ((to-n-power 2) 16),
          ((to-n-power 8) 2)))

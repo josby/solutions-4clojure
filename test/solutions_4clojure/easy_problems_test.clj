@@ -236,3 +236,8 @@
   (is (= 255   (read-binary "11111111")))
   (is (= 1365  (read-binary "10101010101")))
   (is (= 65535 (read-binary "1111111111111111"))))
+
+(deftest _index-seq
+  (is (= (index-seq [:a :b :c]) [[:a 0] [:b 1] [:c 2]]))
+  (is (= (index-seq [0 1 3]) '((0 0) (1 1) (3 2))))
+  (is (= (index-seq [[:foo] {:bar :baz}]) [[[:foo] 0] [{:bar :baz} 1]])))

@@ -374,6 +374,17 @@
     (> b a) (gcd a (mod b a))))
 
 
+; 81 - Set Intersection
+; https://www.4clojure.com/problem/81
+;
+; Write a function which returns the intersection of two sets. The intersection is the sub-set
+; of items that each set has in common.
+; Special Restrictions: intersection
+(defn set-intersection [set1 set2]
+  (into #{}
+        (filter set1 set2)))
+
+
 ; 83 - A Half-Truth
 ; https://www.4clojure.com/problem/83
 ;

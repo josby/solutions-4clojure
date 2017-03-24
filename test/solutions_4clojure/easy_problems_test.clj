@@ -156,6 +156,11 @@
   (is (= (gcd 5 7) 1))
   (is (= (gcd 1023 858) 33)))
 
+(deftest _set-intersection
+  (is (= (set-intersection #{0 1 2 3} #{2 3 4 5}) #{2 3}))
+  (is (= (set-intersection #{0 1 2} #{3 4 5}) #{}))
+  (is (= (set-intersection #{:a :b :c :d} #{:c :e :a :f :d}) #{:a :c :d})))
+
 (deftest _half-truth
   (is (= false (half-truth false false)))
   (is (= true (half-truth true false)))

@@ -1,6 +1,6 @@
 (ns solutions-4clojure.easy-problems-test
-    (:require [clojure.test :refer :all]
-      [solutions-4clojure.easy-problems :refer :all]))
+  (:require [clojure.test :refer :all]
+            [solutions-4clojure.easy-problems :refer :all]))
 
 (deftest _last-element
   (is (= (last-element [1 2 3 4 5]) 5))
@@ -28,7 +28,7 @@
 (deftest _reverse-seq
   (is (= (reverse-seq [1 2 3 4 5]) [5 4 3 2 1]))
   (is (= (reverse-seq (sorted-set 5 7 2 7)) '(7 5 2)))
-  (is (= (reverse-seq [[1 2][3 4][5 6]]) [[5 6][3 4][1 2]])))
+  (is (= (reverse-seq [[1 2] [3 4] [5 6]]) [[5 6] [3 4] [1 2]])))
 
 (deftest _sum
   (is (= (sum [1 2 3]) 6))
@@ -247,6 +247,10 @@
   (is (= 19 (sum-square-digits (range 30))))
   (is (= 50 (sum-square-digits (range 100))))
   (is (= 50 (sum-square-digits (range 1000)))))
+
+(deftest _through-the-looking-class
+  (is (let [x (through-the-looking-class)]
+        (and (= (class x) x) x))))
 
 (deftest _index-seq
   (is (= (index-seq [:a :b :c]) [[:a 0] [:b 1] [:c 2]]))

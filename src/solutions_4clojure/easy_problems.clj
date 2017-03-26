@@ -607,6 +607,16 @@
     (reduce + (map-indexed calculate-nth (reverse n)))))
 
 
+; 126 - Through the Looking Class
+; https://www.4clojure.com/problem/126
+;
+; Enter a value which satisfies the following:
+;(let [x __]
+;  (and (= (class x) x) x))
+(defn through-the-looking-class []
+  Class)
+
+
 ; 157 - Indexing Sequences
 ; https://www.4clojure.com/problem/157
 ;
